@@ -8,25 +8,30 @@ PeopleLegs::PeopleLegs() {
 
 bool PeopleLegs::isSamePerson_() {
     if (t_ == TRACKER_1) {
-        people1_ = people_;
-        distance1_.clear();
-        for (const people_msgs::PositionMeasurement p : people1_) {
-            ROS_INFO("detected person from %d, x: %f || y: %f", TRACKER_1, p.pos.x, p.pos.y);
+        for (const people_msgs::PositionMeasurement p : people_) {
+            people_msg_.header.frame_id = "base_link";
+            people_msg_.header.stamp = ros::Time::now();
+            people_msg_.people.emplace_back(p);
         }
     }
     else if (t_ == TRACKER_2) {
-        people2_ = people_;
-        distance2_.clear();
-	for (const people_msgs::PositionMeasurement p : people2_) {
-            ROS_INFO("detected person from %d, x: %f || y: %f", TRACKER_2, p.pos.x, p.pos.y);
+	    for (const people_msgs::PositionMeasurement p : people2_) {
+            people_msg_.header.frame_id = "base_link";
+            people_msg_.header.stamp = ros::Time::now();
+            people_msg_.people.emplace_back(p);
         }
      }
+     if (people_msg_.people.size())
+        return true;
 }
 
 void PeopleLegs::updateParamCallback_(const people_msgs::PositionMeasurementArray::ConstPtr& msg, PeopleLegs::Tracker t) {
     people_ = msg->people;
     if (!people_.empty()) {
         t_ = t;
-        isSamePerson_();
+        if (isSamePerson_()) {
+            people_pub_.publish(people_msg_);
+            people_msg_.people.clear();
+        }
     }
 }

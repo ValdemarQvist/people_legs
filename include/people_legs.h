@@ -16,9 +16,9 @@ class PeopleLegs {
         ros::NodeHandle n_;
         ros::Subscriber detector_sub1_, detector_sub2_;
         ros::Publisher people_pub_;
-        std::vector<people_msgs::PositionMeasurement> people_, people1_, people2_, detected_people_;
+        std::vector<people_msgs::PositionMeasurement> people_, people1_, people2_;
         std::vector<double> distance1_, distance2_;
-	people_msgs::PositionMeasurementArray people_msg_;
+	    people_msgs::PositionMeasurementArray people_msg_;
 
         enum Tracker{
             TRACKER_1 = 1,

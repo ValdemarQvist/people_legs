@@ -16,7 +16,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(people_legs include/people_legs2.cpp)
+add_library(people_legs include/people_legs.cpp)
 
 add_executable(legs src/main.cpp)
 
